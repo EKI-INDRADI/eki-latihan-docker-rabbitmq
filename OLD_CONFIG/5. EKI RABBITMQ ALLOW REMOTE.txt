@@ -1,0 +1,57 @@
+reference : https://www.rabbitmq.com/networking.html
+
+
+
+docker container exec -it -u 0 rabbitmq_all /bin/sh
+
+apk add nano
+nano --version
+
+nano /etc/rabbitmq/rabbitmq.conf
+
+# EKI NOTE MAKE SURE :
+loopback_users.guest = none   #none = enable remote  # true localhost only
+listeners.tcp.1 = 0.0.0.0:5672
+listeners.tcp.2 = :::5672
+
+
+
+// ==================== example all config
+#reference : 
+#https://www.rabbitmq.com/configure.html
+#https://www.rabbitmq.com/networking.html
+
+loopback_users.guest = none   #none = enable remote  # true localhost only
+#listeners.tcp.default = 5672
+listeners.tcp.1 = 0.0.0.0:5672
+listeners.tcp.2 = :::5672
+
+management.listener.port = 15672
+management.listener.ssl = false
+management.load_definitions = /etc/rabbitmq/definitions.json
+// ==================== example all config
+
+
+
+
+
+
+
+
+
+loopback_users.guest = none   #none = enable remote  # true localhost only
+listeners.tcp.default = 0.0.0.0:5672
+
+management.listener.port = 15672
+management.listener.ssl = false
+management.load_definitions = /etc/rabbitmq/definitions.json
+
+// https://www.rabbitmq.com/uri-spec.html
+amqp://ekiuser:ekipassword@0.0.0.0:5672
+amqp://ekiuser:ekipassword@127.0.0.1:5672
+
+// https://www.rabbitmq.com/rabbitmqctl.8.html
+
+rabbitmqctl stop
+rabbitmqctl start_app
+

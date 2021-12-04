@@ -1,17 +1,15 @@
---------------- NOTE
+
+default login  = guest:guest
+
 docker container exec -it rabbitmq_all /bin/sh ( no root )
 docker container exec -it -u 0 rabbitmq_all /bin/sh (root)
---------------- /NOTE
-
-docker container exec -it -u 0 rabbitmq_all /bin/sh 
 rabbitmqctl list_queues
 
 //==================================================== CREATE USER
 docker container exec -it -u 0 rabbitmq_all /bin/sh  
-rabbitmqctl add_user ekiuser2 ekipassword
-rabbitmqctl set_user_tags ekiuser2 administrator
-rabbitmqctl set_permissions -p / ekiuser2 ".*" ".*" ".*"
+rabbitmqctl add_user ekiuser ekipassword
+rabbitmqctl set_user_tags ekiuser administrator
+rabbitmqctl set_permissions -p / ekiuser".*" ".*" ".*"
 //==================================================== CREATE USER
 
-default login  = ekiuser:ekipassword
-custom login = ekiuser2:ekipassword
+custom login = ekiuser:ekipassword

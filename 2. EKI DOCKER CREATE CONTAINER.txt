@@ -1,5 +1,6 @@
 
-docker pull rabbitmq:3.8.18-management-alpine'
+------------------------------ NEW CODE
+docker pull rabbitmq:3.9.11-management-alpine
 docker container create --name rabbitmq_all \
 --restart always \
 -v /home/docker_rnd/rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json \
@@ -7,10 +8,9 @@ docker container create --name rabbitmq_all \
 -v /home/docker_rnd/rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit \
 -v /home/docker_rnd/rabbitmq/logs:/var/log/rabbitmq/log \
 -p 15672:15672 \
--p 5671:5671 \
 -p 5672:5672 \
--p 4369:4369 \
-rabbitmq:3.8.18-management-alpine
+rabbitmq:3.9.11-management-alpine
 
 
 docker container start rabbitmq_all
+------------------------------ /NEW CODE
