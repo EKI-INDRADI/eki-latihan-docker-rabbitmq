@@ -1,0 +1,6 @@
+//==================================================== CREATE USER
+docker container exec -it -u 0 rabbitmq_all /bin/sh
+rabbitmqctl add_user ekiuser ekipassword
+rabbitmqctl set_user_tags ekiuser administrator
+rabbitmqctl set_permissions -p / ekiuser".*" ".*" ".*"
+//==================================================== CREATE USER

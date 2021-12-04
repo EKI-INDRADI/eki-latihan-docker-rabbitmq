@@ -1,0 +1,16 @@
+mkdir -p /home/docker_rnd/rabbitmq/etc
+chmod 777 -Rv /home/docker_rnd/rabbitmq
+cat > /home/docker_rnd/rabbitmq/etc/definitions.json
+cat > /home/docker_rnd/rabbitmq/etc/rabbitmq.conf
+cat > /home/docker_rnd/rabbitmq/data
+cat > /home/docker_rnd/rabbitmq/logs
+
+nano /home/docker_rnd/rabbitmq/etc/rabbitmq.conf
+
+------------------------------
+loopback_users.guest = none   #none = enable remote  # true localhost only
+listeners.tcp.default = 5672
+management.listener.port = 15672
+management.listener.ssl = false
+management.load_definitions = /etc/rabbitmq/definitions.json
+------------------------------

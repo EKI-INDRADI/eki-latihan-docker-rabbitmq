@@ -1,0 +1,15 @@
+
+default login  = guest:guest
+
+docker container exec -it rabbitmq_all /bin/sh ( no root )
+docker container exec -it -u 0 rabbitmq_all /bin/sh (root)
+rabbitmqctl list_queues
+
+//==================================================== CREATE USER
+docker container exec -it -u 0 rabbitmq_all /bin/sh  
+rabbitmqctl add_user ekiuser ekipassword
+rabbitmqctl set_user_tags ekiuser administrator
+rabbitmqctl set_permissions -p / ekiuser".*" ".*" ".*"
+//==================================================== CREATE USER
+
+custom login = ekiuser:ekipassword
