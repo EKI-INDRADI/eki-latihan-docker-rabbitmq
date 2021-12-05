@@ -4,8 +4,142 @@ cat > /home/docker_rnd/rabbitmq/etc/definitions.json
 cat > /home/docker_rnd/rabbitmq/etc/rabbitmq.conf
 cat > /home/docker_rnd/rabbitmq/data
 cat > /home/docker_rnd/rabbitmq/logs
+cat > /home/docker_rnd/rabbitmq/enabled_plugins
 
+chmod 777 -Rv /home/docker_rnd/rabbitmq
 nano /home/docker_rnd/rabbitmq/etc/rabbitmq.conf
+---------------------------------------------- CONFIG
+
+#reference : 
+#https://www.rabbitmq.com/configure.html
+#https://www.rabbitmq.com/networking.html
+
+default_user = ekiuser
+default_pass = ekipassword
+#default_user = guest
+#default_pass = guest
+default_user_tags.administrator = true
+default_permissions.configure = .*
+default_permissions.read = .*
+default_permissions.write = .*
+loopback_users = none   #none = enable remote  # true localhost only
+
+listeners.tcp.1 = 0.0.0.0:5672
+
+management.listener.port = 15672
+management.listener.ssl = false
+management.load_definitions = /etc/rabbitmq/definitions.json
+
+#========================= STOMP
+#reference : 
+#https://www.rabbitmq.com/stomp.html
+#rabbitmq-plugins enable rabbitmq_stomp
+stomp.listeners.tcp.1 = 0.0.0.0:61613
+#stomp.default_user = stompekiuser
+#stomp.default_pass = stompekipassword
+#========================= /STOMP
+
+#========================= WEB_STOMP (WEB SOCKET)
+#reference : 
+#https://www.rabbitmq.com/web-stomp.html
+# BIKIN ERROR = web_stomp.listeners.tcp.1 = 0.0.0.0:15674
+#========================= /WEB_STOMP (WEB SOCKET)
+
+#========================= MQTT
+#reference : 
+#https://www.rabbitmq.com/mqtt.html
+#rabbitmq-plugins enable rabbitmq_mqtt
+mqtt.listeners.tcp.1 = 0.0.0.0:1883
+#mqtt.allow_anonymous = true #false
+#mqtt.default_user = mqttekiuser
+#mqtt.default_pass = mqttekipassword
+#========================= /MQTT
+
+#========================= WEB_MQTT (WEB SOCKET)
+#reference : 
+#https://www.rabbitmq.com/web-mqtt.html
+# BIKIN ERROR = web_mqtt.listeners.tcp.1 = 0.0.0.0:15675
+#========================= /WEB_MQTT (WEB SOCKET)
+
+
+---------------------------------------------- /CONFIG
+
+nano /home/docker_rnd/rabbitmq/enabled_plugins
+---------------------------------------------- CONFIG
+[rabbitmq_management,rabbitmq_mqtt,rabbitmq_web_mqtt,rabbitmq_prometheus,rabbitmq_stomp,rabbitmq_web_stomp].
+---------------------------------------------- /CONFIG
+chmod 777 -Rv /home/docker_rnd/rabbitmq/enabled_plugins
+
+
+docker container create --name rabbitmq_all \
+--restart always \
+-v /home/docker_rnd/rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json \
+-v /home/docker_rnd/rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf \
+-v /home/docker_rnd/rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit \
+-v /home/docker_rnd/rabbitmq/logs:/var/log/rabbitmq/log \
+-v /home/docker_rnd/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins \
+-p 15672:15672 \
+-p 5672:5672 \
+-p 15692:15692 \
+-p 1883:1883 \
+-p 15675:15675 \
+-p 61613:61613 \
+-p 15674:15674 \
+rabbitmq:3.9.11-management-alpine
+
+
+docker container start rabbitmq_all
+
+
+
+
+
+
+
+
+
+
+
+
+NOTE :
+
+Listening ports
+Protocol	Bound to	Port
+amqp		0.0.0.0		5672
+clustering	::		25672
+http		::		15672
+http/prometheus	::		15692
+http/web-mqtt	::		15675
+http/web-stomp	::		15674
+mqtt		0.0.0.0		1883
+stomp		0.0.0.0		61613
+
+
+Web contexts
+Context	Bound to	Port	SSL	Path
+RabbitMQ Management	0.0.0.0	15672	●	/
+RabbitMQ Prometheus	0.0.0.0	15692	○	/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ------------------------------
@@ -21,8 +155,8 @@ default_permissions.read = .*
 default_permissions.write = .*
 loopback_users = none   #none = enable remote  # true localhost only
 
-listeners.tcp.default = listeners.tcp.default = 0.0.0.0:5672
-#listeners.tcp.1 = 0.0.0.0:5672
+#listeners.tcp.default = 0.0.0.0:5672
+listeners.tcp.1 = 0.0.0.0:5672
 #listeners.tcp.2 = :::5672
 #listeners.tcp.local = 0.0.0.0:5672
 #listeners.tcp.local_v6 = :::5672
@@ -30,5 +164,30 @@ listeners.tcp.default = listeners.tcp.default = 0.0.0.0:5672
 management.listener.port = 15672
 management.listener.ssl = false
 management.load_definitions = /etc/rabbitmq/definitions.json
+
+#========================= STOMP
+#reference : 
+#https://www.rabbitmq.com/stomp.html
+#rabbitmq-plugins enable rabbitmq_stomp
+#stomp.listeners.tcp.default = 0.0.0.0:61613
+stomp.listeners.tcp.1 = 0.0.0.0:61613
+#stomp.listeners.tcp.1 = 127.0.0.1:61613
+stomp.default_user = stompekiuser
+stomp.default_pass = stompekipassword
+#========================= /STOMP
+
+#========================= MQTT
+#reference : 
+#https://www.rabbitmq.com/mqtt.html
+#rabbitmq-plugins enable rabbitmq_mqtt
+#mqtt.listeners.tcp.default = 0.0.0.0:1883
+mqtt.listeners.tcp.1 = 0.0.0.0:1883
+#mqtt.listeners.tcp.1 = 127.0.0.1:1883
+mqtt.allow_anonymous = false
+mqtt.default_user = mqttekiuser
+mqtt.default_pass = mqttekipassword
+#========================= /MQTT
+
+
 
 ------------------------------

@@ -1,0 +1,158 @@
+--------------- NOTE
+docker container exec -it rabbitmq_all /bin/sh ( no root )
+docker container exec -it -u 0 rabbitmq_all /bin/sh (root)
+--------------- /NOTE
+
+docker container exec -it -u 0 rabbitmq_all /bin/sh 
+rabbitmqctl list_queues
+
+//============================== ENABLE PLUGIN
+
+docker container exec -it -u 0 rabbitmq_all /bin/sh 
+
+---------- check-----------
+apk add nano
+nano /etc/rabbitmq/enabled_plugins
+[rabbitmq_management,rabbitmq_prometheus].
+---------- /check-----------
+
+-------------- NOTE USED
+rabbitmqctl stop
+rabbitmqctl stop_app
+-------------- /NOTE USED
+
+rabbitmq-plugins enable rabbitmq_stomp
+rabbitmq-plugins enable rabbitmq_web_stomp
+rabbitmq-plugins enable rabbitmq_mqtt
+rabbitmq-plugins enable rabbitmq_web_mqtt
+
+-------------- NOTE USED
+rabbitmqctl start_app
+-------------- /NOTE USED
+
+---------- check-----------
+nano /etc/rabbitmq/enabled_plugins
+[rabbitmq_management,rabbitmq_mqtt,rabbitmq_web_mqtt,rabbitmq_prometheus,rabbitmq_stomp,rabbitmq_web_stomp].
+---------- /check-----------
+
+//============================== ENABLE PLUGIN
+
+
+
+//============================== AFTER ENABLE PLUGIN
+
+nano /home/docker_rnd/rabbitmq/etc/rabbitmq.conf
+
+
+------------------------------
+#reference : 
+#https://www.rabbitmq.com/configure.html
+#https://www.rabbitmq.com/networking.html
+
+default_user = ekiuser
+default_pass = ekipassword
+default_user_tags.administrator = true
+default_permissions.configure = .*
+default_permissions.read = .*
+default_permissions.write = .*
+loopback_users = none   #none = enable remote  # true localhost only
+
+listeners.tcp.1 = 0.0.0.0:5672
+
+management.listener.port = 15672
+management.listener.ssl = false
+management.load_definitions = /etc/rabbitmq/definitions.json
+
+#========================= STOMP
+#reference : 
+#https://www.rabbitmq.com/stomp.html
+#rabbitmq-plugins enable rabbitmq_stomp
+stomp.listeners.tcp.1 = 0.0.0.0:61613
+stomp.default_user = stompekiuser
+stomp.default_pass = stompekipassword
+#========================= /STOMP
+
+#========================= WEB_STOMP (WEB SOCKET)
+#reference : 
+#https://www.rabbitmq.com/web-stomp.html
+web_stomp.listeners.tcp.1 = 0.0.0.0:15674
+#========================= /WEB_STOMP (WEB SOCKET)
+
+#========================= MQTT
+#reference : 
+#https://www.rabbitmq.com/mqtt.html
+#rabbitmq-plugins enable rabbitmq_mqtt
+mqtt.listeners.tcp.1 = 0.0.0.0:1883
+mqtt.allow_anonymous = false
+mqtt.default_user = mqttekiuser
+mqtt.default_pass = mqttekipassword
+#========================= /MQTT
+
+#========================= WEB_MQTT (WEB SOCKET)
+#reference : 
+#https://www.rabbitmq.com/web-mqtt.html
+web_mqtt.listeners.tcp.1 = 0.0.0.0:15674
+#========================= /WEB_MQTT (WEB SOCKET)
+------------------------------
+
+docker container restart rabbitmq_all
+
+//============================== /AFTER ENABLE PLUGIN
+
+
+
+
+
+//==================================================== CREATE USER
+docker container exec -it -u 0 rabbitmq_all /bin/sh  
+rabbitmqctl add_user ekiuser2 ekipassword
+rabbitmqctl set_user_tags ekiuser2 administrator
+rabbitmqctl set_permissions -p / ekiuser2 ".*" ".*" ".*"
+
+rabbitmqctl add_user mqttekiuser ekipassword
+rabbitmqctl set_user_tags mqttekiuser administrator
+rabbitmqctl set_permissions -p / mqttekiuser ".*" ".*" ".*"
+
+rabbitmqctl add_user stompekiuser ekipassword
+rabbitmqctl set_user_tags stompekiuser administrator
+rabbitmqctl set_permissions -p / stompekiuser ".*" ".*" ".*"
+
+-------------- NOT USED
+# username and password are both "mqtt-test"
+rabbitmqctl add_user mqtt-test mqtt-test
+rabbitmqctl set_permissions -p / mqtt-test ".*" ".*" ".*"
+rabbitmqctl set_user_tags mqtt-test management
+-------------- NOT USED
+
+//==================================================== CREATE USER
+
+default login  = ekiuser:ekipassword
+custom login = ekiuser2:ekipassword
+mqtt login = mqttekiuser:ekipassword
+stomp login = stompekiuser:ekipassword
+
+
+http://localhost:15672
+amqp://ekiuser:ekipassword@0.0.0.0:5672
+
+
+chrome -> Smart Websocket Client
+https://medium.com/factory-mind/websocket-node-js-express-step-by-step-using-typescript-725114ad5fe4
+http://localhost:1883 (need check)
+
+https://www.youtube.com/watch?v=NpJS745VtOA (stomp
+
+ws://127.0.0.1:15675/ws
+ws://127.0.0.1:15674/ws
+http://127.0.0.1:15674/ws
+http://127.0.0.1:15674/stomp
+
+
+http://localhost:61613 (need check)
+ws://localhost:61613/stomp
+ws://localhost:61613/ws
+ws://localhost:61613
+
+
+
+
