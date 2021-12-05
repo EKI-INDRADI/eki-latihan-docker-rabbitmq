@@ -1,0 +1,22 @@
+//==================================================== CREATE USER
+docker container exec -it -u 0 rabbitmq_all /bin/sh  
+rabbitmqctl add_user ekiuser2 ekipassword
+rabbitmqctl set_user_tags ekiuser2 administrator
+rabbitmqctl set_permissions -p / ekiuser2 ".*" ".*" ".*"
+
+rabbitmqctl add_user mqttekiuser ekipassword
+rabbitmqctl set_user_tags mqttekiuser administrator
+rabbitmqctl set_permissions -p / mqttekiuser ".*" ".*" ".*"
+
+rabbitmqctl add_user stompekiuser ekipassword
+rabbitmqctl set_user_tags stompekiuser administrator
+rabbitmqctl set_permissions -p / stompekiuser ".*" ".*" ".*"
+
+-------------- NOT USED
+# username and password are both "mqtt-test"
+rabbitmqctl add_user mqtt-test mqtt-test
+rabbitmqctl set_permissions -p / mqtt-test ".*" ".*" ".*"
+rabbitmqctl set_user_tags mqtt-test management
+-------------- NOT USED
+
+//==================================================== CREATE USER

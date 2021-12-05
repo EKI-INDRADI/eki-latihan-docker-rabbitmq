@@ -1,0 +1,32 @@
+--------------- NOTE
+docker container exec -it rabbitmq_all /bin/sh ( no root )
+docker container exec -it -u 0 rabbitmq_all /bin/sh (root)
+--------------- /NOTE
+
+docker container exec -it -u 0 rabbitmq_all /bin/sh 
+rabbitmqctl list_queues
+
+
+
+
+docker container exec -it -u 0 rabbitmq_all /bin/sh 
+
+---------- check-----------
+apk add nano
+nano /etc/rabbitmq/enabled_plugins
+[rabbitmq_management,rabbitmq_prometheus].
+---------- /check-----------
+
+
+rabbitmqctl stop
+rabbitmqctl stop_app
+rabbitmqctl start_app
+
+
+rabbitmq-plugins enable rabbitmq_stomp
+rabbitmq-plugins enable rabbitmq_web_stomp
+rabbitmq-plugins enable rabbitmq_mqtt
+rabbitmq-plugins enable rabbitmq_web_mqtt
+
+
+
