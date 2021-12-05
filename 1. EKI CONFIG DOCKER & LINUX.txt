@@ -113,11 +113,20 @@ listen :
 
 
 http://127.0.0.1:15672  (web rabbitmq management)
+
 amqp://ekiuser:ekipassword@0.0.0.0:5672 (amqp)
-ws://127.0.0.1:15675/ws (web_mqtt / websocket)
-ws://127.0.0.1:15674/ws (web_stomp / websocket)
-http://127.0.0.1:61613 (stomp)
+
 http://127.0.0.1:1883 (mqtt)
+ws://127.0.0.1:15675/ws (web_mqtt / websocket)
+http://127.0.0.1:15675/ws (web_mqtt  / websocket)
+
+http://127.0.0.1:61613 (stomp)
+ws://127.0.0.1:15674/ws (web_stomp / websocket)
+http://127.0.0.1:15674/ws (web_stomp / websocket)
+
+
+
+
 
 
 
